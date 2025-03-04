@@ -21,9 +21,10 @@ jobs:
           submodules: true
           lfs: false
 
-      - name: Setup .NET 10 Preview Manually
+      - name: Setup .NET 10 Preview
         run: |
-          curl -fsSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 10.0.100-preview.1.23111.5 --install-dir $HOME/.dotnet
+          LATEST_DOTNET_VERSION=$(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/10.0/releases.json | jq -r '.releases[0].latest-sdk')
+          curl -fsSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version $LATEST_DOTNET_VERSION --install-dir $HOME/.dotnet
           echo "$HOME/.dotnet" >> $GITHUB_PATH
 
       - name: Verify .NET Version
