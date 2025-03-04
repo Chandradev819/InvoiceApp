@@ -21,10 +21,13 @@ jobs:
           submodules: true
           lfs: false
 
-      - name: Setup .NET 10 Preview
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '10.0.100-preview.1.23111.5' # Update to latest preview version
+      - name: Setup .NET 10 Preview Manually
+        run: |
+          curl -fsSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 10.0.100-preview.1.23111.5 --install-dir $HOME/.dotnet
+          echo "$HOME/.dotnet" >> $GITHUB_PATH
+
+      - name: Verify .NET Version
+        run: dotnet --version
 
       - name: Restore Dependencies
         run: dotnet restore app
@@ -40,11 +43,11 @@ jobs:
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_DELIGHTFUL_SMOKE_012BFB400 }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for GitHub integrations (i.e., PR comments)
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "app/build/wwwroot"  # Adjusted to match Blazor WebAssembly publish output
-          api_location: "Api" # API source code path - optional
-          output_location: "" # Not needed since we're already specifying the built output
+          app_location: "app/build/wwwroot"
+          api_location: "Api"
+          output_location: ""
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
