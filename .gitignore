@@ -2,6 +2,8 @@
 bin/
 obj/
 out/
+InvoiceApp.sln
+app/app.sln
 *.exe
 *.dll
 *.pdb
