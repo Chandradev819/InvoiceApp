@@ -1,0 +1,43 @@
+# Build and Publish Artifacts
+bin/
+obj/
+out/
+*.exe
+*.dll
+*.pdb
+*.nuget
+*.log
+*.cache
+*.ide
+*.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Dependencies
+**/node_modules/
+**/wwwroot/lib/
+
+# Blazor Specific
+**/wwwroot/_framework/
+**/wwwroot/css/bootstrap/
+**/wwwroot/css/open-iconic/
+**/wwwroot/css/fontawesome/
+**/wwwroot/css/material-icons/
+
+# Logs and Debugging
+*.log
+*.tlog
+*.lastcodeanalysissucceeded
+
+# Visual Studio Specific
+.vscode/
+.idea/
+.project
+*.csproj.user
+*.vbproj.user
+*.pyc
+*.class
+*.DS_Store
+Thumbs.db
