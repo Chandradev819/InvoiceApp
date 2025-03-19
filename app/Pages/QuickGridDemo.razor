@@ -1,6 +1,6 @@
 ﻿@page "/quickgriddemo"
 @using Microsoft.AspNetCore.Components.QuickGrid;
-<QuickGrid @ref="movieGrid" Items="filteredMovies">
+<QuickGrid @ref="movieGrid" Items="filteredMovies" RowClass="GetRowCssClass">
     <PropertyColumn Property="@(m => m.Title)" Title="Title">
         <ColumnOptions>
             <input type="search" @bind="titleFilter" placeholder="Filter by title" @bind:after="@ApplyFilter" />
@@ -12,14 +12,31 @@
 
 @code {
     private QuickGrid<Movie>? movieGrid;
-    private string titleFilter = string.Empty;
-    private List<Movie> movieList = new()
-{
-new Movie { Title = "Inception", Genre = "Sci-Fi", ReleaseYear = 2010 },
-new Movie { Title = "The Matrix", Genre = "Action", ReleaseYear = 1999 },
-new Movie { Title = "Interstellar", Genre = "Sci-Fi", ReleaseYear = 2014 },
-new Movie { Title = "Gladiator", Genre = "Drama", ReleaseYear = 2000 }
-};
+    private List<Movie> movieList = new();
+    private string titleFilter = string.Empty; protected override void OnInitialized()
+    {
+        movieList = GenerateMovies(50);
+    }
+
+    private List<Movie> GenerateMovies(int count)
+    {
+        string[] titles = { "Inception", "The Matrix", "Interstellar", "Gladiator", "Avatar", "Titanic", "The Dark Knight",
+"Forrest Gump", "The Godfather", "Pulp Fiction", "The Shawshank Redemption", "Jurassic Park",
+"The Avengers", "Iron Man", "Spider-Man", "Black Panther", "Doctor Strange", "The Batman",
+"Dune", "The Revenant" };
+
+        string[] genres = { "Action", "Sci-Fi", "Drama", "Thriller", "Horror", "Fantasy", "Comedy", "Crime", "Mystery",
+"Adventure" };
+
+        Random random = new();
+
+        return Enumerable.Range(1, count).Select(i => new Movie
+        {
+            Title = $"{titles[random.Next(titles.Length)]} {random.Next(1, 5)}",
+            Genre = genres[random.Next(genres.Length)],
+            ReleaseYear = random.Next(1980, 2025)
+        }).ToList();
+    }
 
     private IQueryable<Movie> filteredMovies => movieList
     .Where(m => string.IsNullOrWhiteSpace(titleFilter) || m.Title.Contains(titleFilter, StringComparison.OrdinalIgnoreCase))
@@ -29,7 +46,10 @@ new Movie { Title = "Gladiator", Genre = "Drama", ReleaseYear = 2000 }
     {
         movieGrid?.RefreshDataAsync();
     }
-
+    private string GetRowCssClass(Movie movie)
+    {
+        return movie.ReleaseYear < 2005 ? "old-movie" : "new-movie";
+    }
     private class Movie
     {
         public string Title { get; set; } = string.Empty;
@@ -37,3 +57,15 @@ new Movie { Title = "Gladiator", Genre = "Drama", ReleaseYear = 2000 }
         public int ReleaseYear { get; set; }
     }
 }
+
+<style>
+    .odd-row {
+        background-color: #f2f2f2;
+        /* Light gray */
+    }
+
+    .even-row {
+        background-color: #ffffff;
+        /* White */
+    }
+</style>
