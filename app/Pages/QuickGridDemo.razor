@@ -1,0 +1,39 @@
+﻿@page "/quickgriddemo"
+@using Microsoft.AspNetCore.Components.QuickGrid;
+<QuickGrid @ref="movieGrid" Items="filteredMovies">
+    <PropertyColumn Property="@(m => m.Title)" Title="Title">
+        <ColumnOptions>
+            <input type="search" @bind="titleFilter" placeholder="Filter by title" @bind:after="@ApplyFilter" />
+        </ColumnOptions>
+    </PropertyColumn>
+    <PropertyColumn Property="@(m => m.Genre)" Title="Genre" />
+    <PropertyColumn Property="@(m => m.ReleaseYear)" Title="Release Year" />
+</QuickGrid>
+
+@code {
+    private QuickGrid<Movie>? movieGrid;
+    private string titleFilter = string.Empty;
+    private List<Movie> movieList = new()
+{
+new Movie { Title = "Inception", Genre = "Sci-Fi", ReleaseYear = 2010 },
+new Movie { Title = "The Matrix", Genre = "Action", ReleaseYear = 1999 },
+new Movie { Title = "Interstellar", Genre = "Sci-Fi", ReleaseYear = 2014 },
+new Movie { Title = "Gladiator", Genre = "Drama", ReleaseYear = 2000 }
+};
+
+    private IQueryable<Movie> filteredMovies => movieList
+    .Where(m => string.IsNullOrWhiteSpace(titleFilter) || m.Title.Contains(titleFilter, StringComparison.OrdinalIgnoreCase))
+    .AsQueryable();
+
+    private void ApplyFilter()
+    {
+        movieGrid?.RefreshDataAsync();
+    }
+
+    private class Movie
+    {
+        public string Title { get; set; } = string.Empty;
+        public string Genre { get; set; } = string.Empty;
+        public int ReleaseYear { get; set; }
+    }
+}
