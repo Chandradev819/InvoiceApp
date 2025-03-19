@@ -1,4 +1,6 @@
 ﻿@page "/quickgriddemo"
+<h2>QuickGrid Close options Demo</h2>
+<p>You can now close the QuickGrid column options UI using the new CloseColumnOptionsAsync method.</p>
 @using Microsoft.AspNetCore.Components.QuickGrid;
 <QuickGrid @ref="movieGrid" Items="filteredMovies" RowClass="GetRowCssClass">
     <PropertyColumn Property="@(m => m.Title)" Title="Title">
