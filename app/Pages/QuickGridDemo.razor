@@ -1,11 +1,13 @@
 ﻿@page "/quickgriddemo"
 <h2>QuickGrid Close options Demo</h2>
-<p>You can now close the QuickGrid column options UI using the new CloseColumnOptionsAsync method.</p>
+
+<p>new Filter window will auto colose after search options</p>
 @using Microsoft.AspNetCore.Components.QuickGrid;
-<QuickGrid @ref="movieGrid" Items="filteredMovies" RowClass="GetRowCssClass">
+<QuickGrid @ref="movieGrid" Items="filteredMovies" Class="movie-grid" RowClass="GetRowCssClass">
     <PropertyColumn Property="@(m => m.Title)" Title="Title">
         <ColumnOptions>
-            <input type="search" @bind="titleFilter" placeholder="Filter by title" @bind:after="@ApplyFilter" />
+            <input type="search" @bind="titleFilter" placeholder="Filter by title"
+                @bind:after="@(() => movieGrid.CloseColumnOptionsAsync())" />
         </ColumnOptions>
     </PropertyColumn>
     <PropertyColumn Property="@(m => m.Genre)" Title="Genre" />
@@ -50,7 +52,7 @@
     }
     private string GetRowCssClass(Movie movie)
     {
-        return movie.ReleaseYear < 2005 ? "old-movie" : "new-movie";
+        return movie.ReleaseYear < 2008 ? "odd-row" : "even-row";
     }
     private class Movie
     {
@@ -62,12 +64,76 @@
 
 <style>
     .odd-row {
-        background-color: #f2f2f2;
+        background-color: silver;
         /* Light gray */
     }
 
     .even-row {
-        background-color: #ffffff;
+        background-color: green;
         /* White */
+    }
+
+    /* 📌 QuickGrid Table Styling */
+    .movie-grid {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+        border: 2px solid #333;
+        /* Table border */
+    }
+
+    /* 🔲 Table Header Styling */
+    .movie-grid th {
+        background-color: blueviolet;
+        /* Dark gray */
+        color: white;
+        /* White text */
+        padding: 12px;
+        text-align: left;
+        font-size: 16px;
+    }
+
+    /* 🔳 Table Data Cell Styling */
+    .movie-grid td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        font-size: 14px;
+    }
+
+    /* 🎭 Alternating Row Colors */
+    .movie-grid .odd-row {
+        background-color: silver !important;
+        /* Light gray */
+        color: black;
+    }
+
+    .movie-grid .even-row {
+        background-color: green !important;
+        /* Green */
+        color: white;
+    }
+
+    /* 🎬 Old Movie Row Styling (Before 2005) */
+    .movie-grid .old-movie {
+        background-color: #ffebe6 !important;
+        /* Soft red */
+        font-weight: bold;
+        color: darkred;
+    }
+
+    /* 🎥 New Movie Row Styling (2005 and after) */
+    .movie-grid .new-movie {
+        background-color: #e6ffe6 !important;
+        /* Soft green */
+        font-weight: bold;
+        color: darkgreen;
+    }
+
+    /* 🎯 Hover Effect for Better UX */
+    .movie-grid tr:hover {
+        background-color: #d0e0ff !important;
+        /* Light blue on hover */
+        cursor: pointer;
+        transition: 0.2s ease-in-out;
     }
 </style>
