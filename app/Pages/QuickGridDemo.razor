@@ -1,7 +1,7 @@
 ﻿@page "/quickgriddemo"
 <h2>QuickGrid Close options Demo</h2>
 
-<p>new Filter window will auto colose after search options</p>
+<p>Now Filter window will auto colose after search options</p>
 @using Microsoft.AspNetCore.Components.QuickGrid;
 <QuickGrid @ref="movieGrid" Items="filteredMovies" Class="movie-grid" RowClass="GetRowCssClass">
     <PropertyColumn Property="@(m => m.Title)" Title="Title">
