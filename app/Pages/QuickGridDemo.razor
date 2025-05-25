@@ -7,7 +7,7 @@
     <PropertyColumn Property="@(m => m.Title)" Title="Title">
         <ColumnOptions>
             <input type="search" @bind="titleFilter" placeholder="Filter by title"
-                @bind:after="@(() => movieGrid.CloseColumnOptionsAsync())" />
+                @bind:after="@(() => movieGrid.HideColumnOptionsAsync())" />
         </ColumnOptions>
     </PropertyColumn>
     <PropertyColumn Property="@(m => m.Genre)" Title="Genre" />
