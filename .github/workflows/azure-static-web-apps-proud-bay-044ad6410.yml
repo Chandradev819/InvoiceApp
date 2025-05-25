@@ -21,6 +21,15 @@ jobs:
           submodules: true
           lfs: false
 
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Update BuildNumber in appsettings.json
+        run: |
+          BUILD_NUMBER="${{ github.run_number }}.${{ github.sha }}"
+          jq --arg bn "$BUILD_NUMBER" '.BuildNumber = $bn' app/wwwroot/appsettings.json > app/wwwroot/appsettings.tmp.json
+          mv app/wwwroot/appsettings.tmp.json app/wwwroot/appsettings.json
+
       - name: Setup .NET 10 Preview
         run: |
           curl -fsSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 10.0 --install-dir $HOME/.dotnet
