@@ -63,6 +63,8 @@ jobs:
           app_location: "app/build/wwwroot"
           api_location: "Api"
           output_location: ""
+          # Uncomment the following line to allow workflow to continue without deploying if the secret is missing
+          # skip_deploy_on_missing_secrets: true
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
