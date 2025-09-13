@@ -13,7 +13,7 @@ jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
-    name: Build and Deploy Job
+    name: Build and Deploy Blazor WASM
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -21,7 +21,7 @@ jobs:
           submodules: true
           lfs: false
 
-      - name: Setup .NET 10 Preview
+      - name: Setup .NET 10 RC1
         run: |
           curl -fsSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 10.0 --install-dir $HOME/.dotnet
           echo "$HOME/.dotnet" >> $GITHUB_PATH
@@ -33,29 +33,26 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore app
 
-      # ✅ Update BuildNumber in appsettings.json
-      - name: Update Build Number
-        run: |
-          BUILD_NUMBER="2.0.${{ github.run_number }}"
-          echo "Updating BuildNumber to $BUILD_NUMBER"
-          jq --arg bn "$BUILD_NUMBER" '.BuildNumber = $bn' app/wwwroot/appsettings.json > temp.json && mv temp.json app/wwwroot/appsettings.json
-
       - name: Build Blazor WebAssembly
         run: dotnet build app --configuration Release --no-restore
 
-      - name: Publish Blazor WebAssembly (AOT + Brotli)
-        run: dotnet publish app -c Release /p:BlazorWebAssemblyEnableAOT=true /p:CompressionEnabled=true
+      - name: Publish Blazor WebAssembly with Compression
+        run: |
+          dotnet publish app -c Release -o app/build \
+            /p:BlazorWebAssemblyEnableAOT=false \
+            /p:BlazorEnableCompression=true \
+            /p:BlazorWebAssemblyEnableCompression=true
 
       - name: Deploy to Azure Static Web Apps
-        id: builddeploy
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          action: "upload"
-          app_location: "app/build/wwwroot"
-          api_location: "Api"
-          output_location: ""
+  id: builddeploy
+  uses: Azure/static-web-apps-deploy@v1
+  with:
+    azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_PROUD_POND_0D050E910 }}
+    repo_token: ${{ secrets.GITHUB_TOKEN }}
+    action: "upload"
+    app_location: "app/build"
+    output_location: ""
+
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
@@ -66,7 +63,5 @@ jobs:
         id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_DELIGHTFUL_SMOKE_012BFB400 }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_PROUD_POND_0D050E910 }}
           action: "close"
-
-
