@@ -6,7 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
 		<BlazorEnableCompression>true</BlazorEnableCompression>
 		<BlazorWebAssemblyEnableCompression>true</BlazorWebAssemblyEnableCompression>
-		<BlazorEnableTimeZoneSupport>false</BlazorEnableTimeZoneSupport>
 		<BlazorWasmPrerenderingDeleteLoadingContents>true</BlazorWasmPrerenderingDeleteLoadingContents>
   </PropertyGroup>
 
