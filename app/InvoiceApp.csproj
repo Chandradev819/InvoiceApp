@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -7,10 +7,11 @@
 		<BlazorEnableCompression>true</BlazorEnableCompression>
 		<BlazorWebAssemblyEnableCompression>true</BlazorWebAssemblyEnableCompression>
 		<BlazorEnableTimeZoneSupport>false</BlazorEnableTimeZoneSupport>
-		<PublishTrimmed>true</PublishTrimmed>
+		<BlazorWasmPrerenderingDeleteLoadingContents>true</BlazorWasmPrerenderingDeleteLoadingContents>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BlazorWasmPreRendering.Build" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="10.0.0-rc.1.25451.107" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.0-rc.1.25451.107" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.0-rc.1.25451.107" PrivateAssets="all" />
