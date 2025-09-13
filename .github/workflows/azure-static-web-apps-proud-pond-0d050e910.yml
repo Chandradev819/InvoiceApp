@@ -45,7 +45,7 @@ jobs:
 
       # ✅ Publish with compression enabled
       - name: Publish Blazor WebAssembly (with compression)
-        run: dotnet publish app -c Release -o app/build
+        run: dotnet publish app/app.csproj -c Release -o app/build /p:BlazorEnableCompression=true /p:BlazorWebAssemblyEnableCompression=true
 
       - name: Deploy to Azure Static Web Apps
         id: builddeploy
@@ -69,5 +69,6 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           action: "close"
+
 
 
