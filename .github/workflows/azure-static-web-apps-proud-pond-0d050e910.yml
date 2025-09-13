@@ -21,11 +21,12 @@ jobs:
           submodules: true
           lfs: false
 
-      - name: Setup .NET 10 Preview
+      - name: Setup .NET 10 RC1
         run: |
           curl -fsSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 10.0 --install-dir $HOME/.dotnet
           echo "$HOME/.dotnet" >> $GITHUB_PATH
           echo "DOTNET_ROOT=$HOME/.dotnet" >> $GITHUB_ENV
+
       - name: Verify .NET Version
         run: dotnet --version
 
@@ -38,11 +39,15 @@ jobs:
           BUILD_NUMBER="2.0.${{ github.run_number }}"
           echo "Updating BuildNumber to $BUILD_NUMBER"
           jq --arg bn "$BUILD_NUMBER" '.BuildNumber = $bn' app/wwwroot/appsettings.json > temp.json && mv temp.json app/wwwroot/appsettings.json
+
       - name: Build Blazor WebAssembly
         run: dotnet build app --configuration Release --no-restore
 
-      - name: Publish Blazor WebAssembly
-        run: dotnet publish app -c Release -o app/build
+      # ✅ Publish with compression enabled
+      - name: Publish Blazor WebAssembly (with compression)
+        run: dotnet publish app -c Release -o app/build \
+          /p:BlazorEnableCompression=true \
+          /p:BlazorWebAssemblyEnableCompression=true
 
       - name: Deploy to Azure Static Web Apps
         id: builddeploy
@@ -52,7 +57,7 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "app/build/wwwroot"
-          api_location: "Api"
+          api_location: ""
           output_location: ""
 
   close_pull_request_job:
