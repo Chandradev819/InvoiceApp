@@ -4,16 +4,17 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-		<BlazorWebAssemblyEnableCompression>true</BlazorWebAssemblyEnableCompression>
+    <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
 		<BlazorEnableTimeZoneSupport>false</BlazorEnableTimeZoneSupport>
 		<BlazorEnableCompression>true</BlazorEnableCompression>
 		<BlazorWebAssemblyEnableCompression>true</BlazorWebAssemblyEnableCompression>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BlazorWasmPreRendering.Build" Version="7.0.0-preview.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="10.0.0-rc.1.25451.107" />
+		<PackageReference Include="BlazorWasmPreRendering.Build" Version="7.0.0-preview.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="10.0.0-rc.1.25451.107" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.0-rc.1.25451.107" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.0-rc.1.25451.107" PrivateAssets="all" />
   </ItemGroup>
+
 </Project>
