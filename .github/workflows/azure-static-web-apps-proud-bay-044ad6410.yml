@@ -44,7 +44,7 @@ jobs:
         run: dotnet build app --configuration Release --no-restore
 
       - name: Publish Blazor WebAssembly (AOT + Brotli)
-        run: dotnet publish ./Client -c Release /p:BlazorWebAssemblyEnableAOT=true /p:CompressionEnabled=true
+        run: dotnet publish app -c Release /p:BlazorWebAssemblyEnableAOT=true /p:CompressionEnabled=true
 
       - name: Deploy to Azure Static Web Apps
         id: builddeploy
@@ -68,4 +68,5 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_DELIGHTFUL_SMOKE_012BFB400 }}
           action: "close"
+
 
