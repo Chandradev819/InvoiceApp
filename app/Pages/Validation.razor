@@ -1,0 +1,56 @@
+﻿@page "/validationdemo"
+@using System.ComponentModel.DataAnnotations
+@using InvoiceApp.Shared
+@using Microsoft.AspNetCore.Components.Forms
+
+<PageTitle>Employee Validation Demo</PageTitle>
+
+<h3>Complex Modal Validation in Blazor 10</h3>
+
+<EditForm EditContext="@editContext" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">First Name</label>
+        <InputText class="form-control" @bind-Value="emp.FirstName" />
+        <ValidationMessage For="@(() => emp.FirstName)" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Last Name</label>
+        <InputText class="form-control" @bind-Value="emp.LastName" />
+        <ValidationMessage For="@(() => emp.LastName)" />
+    </div>
+
+    <h5>Address</h5>
+    <div class="mb-3">
+        <label class="form-label">Street</label>
+        <InputText class="form-control" @bind-Value="emp!.Address.Street" />
+        <ValidationMessage For="@(() => emp!.Address.Street)" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">City</label>
+        <InputText class="form-control" @bind-Value="emp!.Address.City" />
+        <ValidationMessage For="@(() => emp!.Address.City)" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Submit</button>
+</EditForm>
+
+@code {
+    private Emp emp = new();
+    private EditContext editContext;
+
+    protected override void OnInitialized()
+    {
+        editContext = new(emp);
+    }
+
+    private void HandleValidSubmit()
+    {
+        Console.WriteLine($"Employee: {emp.FirstName} {emp.LastName}, City: {emp.Address.City}");
+    }
+}
+
