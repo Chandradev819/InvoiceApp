@@ -13,7 +13,7 @@ jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
-    name: Build and Deploy Job
+    name: Build and Deploy Blazor WASM
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -21,7 +21,7 @@ jobs:
           submodules: true
           lfs: false
 
-      - name: Setup .NET 10 Preview
+      - name: Setup .NET 10 RC1
         run: |
           curl -fsSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 10.0 --install-dir $HOME/.dotnet
           echo "$HOME/.dotnet" >> $GITHUB_PATH
@@ -36,8 +36,12 @@ jobs:
       - name: Build Blazor WebAssembly
         run: dotnet build app --configuration Release --no-restore
 
-      - name: Publish Blazor WebAssembly
-        run: dotnet publish app -c Release -o app/build
+      - name: Publish Blazor WebAssembly with Compression
+        run: |
+          dotnet publish app -c Release -o app/build \
+            /p:BlazorWebAssemblyEnableAOT=false \
+            /p:BlazorEnableCompression=true \
+            /p:BlazorWebAssemblyEnableCompression=true
 
       - name: Deploy to Azure Static Web Apps
         id: builddeploy
@@ -46,9 +50,8 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_PROUD_POND_0D050E910 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for GitHub integrations (i.e., PR comments)
           action: "upload"
-          app_location: "app/build/wwwroot"  # Adjusted to match Blazor WebAssembly publish output
-          api_location: "Api" # API source code path - optional
-          output_location: "" # Not needed since we're already specifying the built output
+          app_location: "app/build/wwwroot"
+          output_location: "" # No API, so leave blank
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
