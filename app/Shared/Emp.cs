@@ -1,7 +1,6 @@
 ﻿namespace InvoiceApp.Shared
 {
     using System.ComponentModel.DataAnnotations;
-    using Microsoft.AspNetCore.Components.Forms; // Needed for [ValidatableType]
 
     [ValidatableType]
     public class Emp
